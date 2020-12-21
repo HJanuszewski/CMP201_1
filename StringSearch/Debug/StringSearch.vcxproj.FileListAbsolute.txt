@@ -1,0 +1,2 @@
+D:\Github Repos\Coursework\CMP201_1\StringSearch\Debug\StringSearch.exe
+D:\Github Repos\Coursework\CMP201_1\StringSearch\Debug\StringSearch.pdb
