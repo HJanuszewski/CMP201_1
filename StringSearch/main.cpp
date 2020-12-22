@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 #include <fstream>
-
+#include <set>
 
 
 
@@ -11,9 +11,17 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 	unsigned short count = 0;
 	unsigned short a = 0; // while usually those should be named i and j, I've changed them to a and b for my own convenience, since with traditional naming, I sometimes forgot that they were not local to the loops they control
 	unsigned short b = 0;
+
+	//Raskolnikov - this problem's target substgring is  composed from letters R a s k o l n i v - CASE SENSITIVE
+	std::set<char> letters; // this set will be used to check if a letter is present in the substring
+	for (int i = 0; i < subString.length(); i++)
+	{
+		letters.insert(subString[i]);
+	}
+
 	if (clength < slength) return 0; // the word can not be present in a line, that is shorter than the word itself
-	//TODO: search throught the lectures and implement a map for letters that are present in the substring that can be compared when a miss is detected
-	//Raskolnikov - composed from letters R a s k o l n i v - CASE SENSITIVE
+
+	
 	for (a = 0; a < content.size() - subString.size(); a++) // in regular circumstances, nested for loops would make the efficiency a lot worse than what this algorithm can achieve, however, when running those loops, we will be modifying values of the iterators, jumping forward whenever we can.
 	{	
 		
@@ -26,6 +34,8 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 		}
 		if (b != subString.size() - 1) // if the previous loop had a break happen (if there was a character that was not matching with the substring)
 		{
+
+
 			//TODO: we should do a fancy jump to a later part of the string using the variable a
 			//TODO: think through exactly how far should we jump forward, this will require the map of letters and 
 			// a = something somethng, write that later
