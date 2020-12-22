@@ -2,4 +2,5 @@
 D:\Github Repos\Coursework\CMP201_1\StringSearch\main.cpp(9,43): warning C4267: "inicjowanie": konwersja z "size_t" do "unsigned short", możliwa utrata danych
 D:\Github Repos\Coursework\CMP201_1\StringSearch\main.cpp(10,45): warning C4267: "inicjowanie": konwersja z "size_t" do "unsigned short", możliwa utrata danych
 D:\Github Repos\Coursework\CMP201_1\StringSearch\main.cpp(21,20): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+D:\Github Repos\Coursework\CMP201_1\StringSearch\main.cpp(47,30): warning C4267: "+=": konwersja z "size_t" do "unsigned short", możliwa utrata danych
   StringSearch.vcxproj -> D:\Github Repos\Coursework\CMP201_1\StringSearch\Debug\StringSearch.exe

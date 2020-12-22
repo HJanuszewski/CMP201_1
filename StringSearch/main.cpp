@@ -11,7 +11,7 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 	unsigned short count = 0;
 	unsigned short a = 0; // while usually those should be named i and j, I've changed them to a and b for my own convenience, since with traditional naming, I sometimes forgot that they were not local to the loops they control
 	unsigned short b = 0;
-	std::string test = "";
+	
 	std::fstream plik;
 	plik.open("log.txt", std::ios::out);
 
@@ -34,7 +34,7 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 			//temporary couts to ensure checks are proper
 			plik << subString[subString.size() - 1 - b] <<" a: " << a << " " << std::endl << content[subString.size() - b + a - 1] << " b: " << b << " " << std::endl << std::endl;
 			
-			test.push_back(content[subString.size() - b + a - 1]) ;
+			
 			if (subString[subString.size() - 1 - b ] != content[subString.size() - b + a - 1])
 			{
 				break;
@@ -42,7 +42,10 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 		}
 		if (b != subString.size() - 1) // if the previous loop had a break happen (if there was a character that was not matching with the substring)
 		{
-
+			if (!letters.count(content[subString.size() - b + a - 1])) // when the letter that is not matching with the substring is not present in the substring at all
+			{
+				a += subString.length()-1;
+			}
 
 			//TODO: we should do a fancy jump to a later part of the string using the variable a
 			//TODO: think through exactly how far should we jump forward, this will require the map of letters and 
@@ -51,13 +54,12 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 		}
 		else // getting to this section means that the loop has finished without breaking. This should indicate that all letters from the pattern matched, meaning that the substring was found
 		{
-
+			std::cout << "CONFIRMED SUBSTRING PRESENCE" << std::endl;
 			count++;
 		}
 
 	}
 	plik.close();
-	std::cout << "test stting = " << test << " " << count << std::endl;
 	return count;
 }
 
@@ -88,7 +90,7 @@ unsigned short subStringCountBM(std::string fileName, std::string subString )
 int main()
 {
 	//TODO: find in the lectures all of the methods we're supposed to measure the performance of out programs and start to think about implementing them
-	std::cout << "count of substrings found: " <<subStringCountBM("test.txt", "pieseczek");
+	std::cout << "count of substrings found: " <<subStringCountBM("test.txt", "hijklmno");
 
 	return 0;
 
