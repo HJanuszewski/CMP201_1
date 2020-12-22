@@ -3,6 +3,7 @@
 #include <set>
 #include <map>
 #include <unordered_map>
+#include <string>
 
 
 
@@ -14,6 +15,9 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 	unsigned short a = 0; // while usually those should be named i and j, I've changed them to a and b for my own convenience, since with traditional naming, I sometimes forgot that they were not local to the loops they control
 	unsigned short b = 0;
 	
+	 char filecount[1] = {0};
+	
+
 	//Raskolnikov - this problem's target substgring is  composed from letters R a s k o l n i v - CASE SENSITIVE
 	std::set<char> letters; // this set will be used to check if a letter is present in the substring
 	for (int i = 0; i < subString.length(); i++)
@@ -45,10 +49,7 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 
 
 	std::fstream plik;
-	std::string filename = content;
-	filename.append(".txt");
-	plik.open(filename, std::ios::out);
-
+	
 
 	
 	std::cout << "clength: " << clength << " slength: " << slength << std::endl;
@@ -57,6 +58,12 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 	
 	for (a = 0; a <= content.size() - subString.size(); a++) // in regular circumstances, nested for loops would make the efficiency a lot worse than what this algorithm can achieve, however, when running those loops, we will be modifying values of the iterators, jumping forward whenever we can.
 	{	
+		std::string filename = ""; 
+		filename.append(filecount);
+		filecount[0]++;
+		filename.append(".txt");
+		plik.open(filename, std::ios::out);
+
 		
 		for ( b = 0; b < subString.size() -1 ; b++)
 		{
@@ -106,7 +113,7 @@ unsigned short subStringCountBM(std::string fileName, std::string subString )
 
 	while (file.good()) // while we have not reached the end of the file 
 	{
-		file >> line; //get the next line of text
+		std::getline(file, line); //get the next line of text
 		std::cout << line << std::endl;
 		count+=BMFindInLine(line, subString); //check how many times substring appears in it and increment the count by that amount 
 		std::cout << "NEW LINE !! " << count <<  std::endl;
@@ -121,7 +128,7 @@ unsigned short subStringCountBM(std::string fileName, std::string subString )
 int main()
 {
 	//TODO: find in the lectures all of the methods we're supposed to measure the performance of out programs and start to think about implementing them
-	std::cout << "count of substrings found: " <<subStringCountBM("test.txt", "ehh");
+	std::cout << "count of substrings found: " <<subStringCountBM("test.txt", "Raskolnikov");
 
 	return 0;
 
