@@ -11,6 +11,10 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 	unsigned short count = 0;
 	unsigned short a = 0; // while usually those should be named i and j, I've changed them to a and b for my own convenience, since with traditional naming, I sometimes forgot that they were not local to the loops they control
 	unsigned short b = 0;
+	std::string test = "";
+	std::fstream plik;
+	plik.open("log.txt", std::ios::out);
+
 
 	//Raskolnikov - this problem's target substgring is  composed from letters R a s k o l n i v - CASE SENSITIVE
 	std::set<char> letters; // this set will be used to check if a letter is present in the substring
@@ -18,15 +22,19 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 	{
 		letters.insert(subString[i]);
 	}
-
+	std::cout << "clength: " << clength << " slength: " << slength << std::endl;
 	if (clength < slength) return 0; // the word can not be present in a line, that is shorter than the word itself
 
 	
-	for (a = 0; a < content.size() - subString.size(); a++) // in regular circumstances, nested for loops would make the efficiency a lot worse than what this algorithm can achieve, however, when running those loops, we will be modifying values of the iterators, jumping forward whenever we can.
+	for (a = 0; a <= content.size() - subString.size(); a++) // in regular circumstances, nested for loops would make the efficiency a lot worse than what this algorithm can achieve, however, when running those loops, we will be modifying values of the iterators, jumping forward whenever we can.
 	{	
 		
 		for ( b = 0; b < subString.size() -1 ; b++)
 		{
+			//temporary couts to ensure checks are proper
+			plik << subString[subString.size() - 1 - b] <<" a: " << a << " " << std::endl << content[subString.size() - b + a - 1] << " b: " << b << " " << std::endl << std::endl;
+			
+			test.push_back(content[subString.size() - b + a - 1]) ;
 			if (subString[subString.size() - 1 - b ] != content[subString.size() - b + a - 1])
 			{
 				break;
@@ -48,7 +56,8 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 		}
 
 	}
-	
+	plik.close();
+	std::cout << "test stting = " << test << " " << count << std::endl;
 	return count;
 }
 
@@ -65,9 +74,9 @@ unsigned short subStringCountBM(std::string fileName, std::string subString )
 	while (file.good()) // while we have not reached the end of the file 
 	{
 		file >> line; //get the next line of text
-		
+		std::cout << line << std::endl;
 		count+=BMFindInLine(line, subString); //check how many times substring appears in it and increment the count by that amount 
-		
+		std::cout << "NEW LINE !! " << count <<  std::endl;
 	}
 
 	file.close();
@@ -79,7 +88,8 @@ unsigned short subStringCountBM(std::string fileName, std::string subString )
 int main()
 {
 	//TODO: find in the lectures all of the methods we're supposed to measure the performance of out programs and start to think about implementing them
-	subStringCountBM("test.txt", "asd");
+	std::cout << "count of substrings found: " <<subStringCountBM("test.txt", "pieseczek");
+
 	return 0;
 
 }
