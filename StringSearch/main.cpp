@@ -1,6 +1,8 @@
 ﻿#include <iostream>
 #include <fstream>
 #include <set>
+#include <map>
+#include <unordered_map>
 
 
 
@@ -12,16 +14,43 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 	unsigned short a = 0; // while usually those should be named i and j, I've changed them to a and b for my own convenience, since with traditional naming, I sometimes forgot that they were not local to the loops they control
 	unsigned short b = 0;
 	
-	std::fstream plik;
-	plik.open("log.txt", std::ios::out);
-
-
 	//Raskolnikov - this problem's target substgring is  composed from letters R a s k o l n i v - CASE SENSITIVE
 	std::set<char> letters; // this set will be used to check if a letter is present in the substring
 	for (int i = 0; i < subString.length(); i++)
 	{
 		letters.insert(subString[i]);
 	}
+
+
+	std::unordered_map<int,int> map;// a pseudo-hashtable, uses ascii value of a letter mapped to amount of letters the algorithm can jump when it is found (and is not matching) during the check) 
+	// a substring-specific map would be easy to set by initialising fields for all letters to skip the length of the substring and overwrite letters of interest. However, even though more complex, the implementation below is generic and should work on anysubstring provided
+	for (int i = 32; i < 126; i++) //all printable ASCII codes
+	{	
+		if (letters.count((char)i)) //if the letter we're currently assigning is persent in the substring
+		{
+			short distance = -1;
+			for (short j = subString.length()-1; j >0; j--)
+			{
+				if (subString[j] == (char)i)
+				{
+					break;
+				}
+				else distance++;
+			}
+			map[(char)i] = distance;
+		}
+		else map[i] = subString.length() - 1; // if it's not, we should skip to the end, since there's no ppossibility of the substring appearing there
+	}
+
+
+
+	std::fstream plik;
+	std::string filename = content;
+	filename.append(".txt");
+	plik.open(filename, std::ios::out);
+
+
+	
 	std::cout << "clength: " << clength << " slength: " << slength << std::endl;
 	if (clength < slength) return 0; // the word can not be present in a line, that is shorter than the word itself
 
@@ -44,9 +73,11 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 		{
 			if (!letters.count(content[subString.size() - b + a - 1])) // when the letter that is not matching with the substring is not present in the substring at all
 			{
-				a += subString.length()-1;
+				a += subString.length()-2;
 			}
-
+			std::cout << "A IS : " << a << " AND THE OTHER THING IS: " << map[(int)content[subString.size() - b + a - 1]] << " AND THE OTHER OTHER THING IS: " << content[subString.size() - b + a - 1] << std::endl;
+			a += map[(int)content[subString.size() - b + a - 1]] -1;
+			std::cout << "NOW A IS : " << a << std::endl;
 			//TODO: we should do a fancy jump to a later part of the string using the variable a
 			//TODO: think through exactly how far should we jump forward, this will require the map of letters and 
 			// a = something somethng, write that later
@@ -90,7 +121,7 @@ unsigned short subStringCountBM(std::string fileName, std::string subString )
 int main()
 {
 	//TODO: find in the lectures all of the methods we're supposed to measure the performance of out programs and start to think about implementing them
-	std::cout << "count of substrings found: " <<subStringCountBM("test.txt", "hijklmno");
+	std::cout << "count of substrings found: " <<subStringCountBM("test.txt", "eh");
 
 	return 0;
 
