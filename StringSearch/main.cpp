@@ -28,7 +28,7 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 	{	
 		if (letters.count((char)i)) //if the letter we're currently assigning is persent in the substring
 		{
-			short distance = -1;
+			short distance = 1;
 			for (short j = subString.length()-1; j >0; j--)
 			{
 				if (subString[j] == (char)i)
@@ -39,7 +39,7 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 			}
 			map[(char)i] = distance;
 		}
-		else map[i] = subString.length() - 1; // if it's not, we should skip to the end, since there's no ppossibility of the substring appearing there
+		else map[i] = subString.length() ; // if it's not, we should skip to the end, since there's no ppossibility of the substring appearing there
 	}
 
 
@@ -121,7 +121,7 @@ unsigned short subStringCountBM(std::string fileName, std::string subString )
 int main()
 {
 	//TODO: find in the lectures all of the methods we're supposed to measure the performance of out programs and start to think about implementing them
-	std::cout << "count of substrings found: " <<subStringCountBM("test.txt", "eh");
+	std::cout << "count of substrings found: " <<subStringCountBM("test.txt", "ehh");
 
 	return 0;
 

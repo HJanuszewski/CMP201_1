@@ -1,12 +1,9 @@
 h a: 0 
-e b: 0 
-
-h a: 1 
 h b: 0 
 
-h a: 2 
-g b: 0 
+h a: 0 
+e b: 1 
 
-h a: 4 
+h a: 3 
 u b: 0 
 
