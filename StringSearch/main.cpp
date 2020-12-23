@@ -56,7 +56,7 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 	if (clength < slength) return 0; // the word can not be present in a line, that is shorter than the word itself
 
 	
-	for (a = 0; a <= content.size() - subString.size(); a++) // in regular circumstances, nested for loops would make the efficiency a lot worse than what this algorithm can achieve, however, when running those loops, we will be modifying values of the iterators, jumping forward whenever we can.
+	for (a = 0; a <= content.size() - subString.size() -1; a++) // in regular circumstances, nested for loops would make the efficiency a lot worse than what this algorithm can achieve, however, when running those loops, we will be modifying values of the iterators, jumping forward whenever we can.
 	{	
 		std::string filename = ""; 
 		filename.append(filecount);
@@ -67,20 +67,26 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 		
 		for ( b = 0; b < subString.size() -1 ; b++)
 		{
-			//temporary couts to ensure checks are proper
-			plik << subString[subString.size() - 1 - b] <<" a: " << a << " " << std::endl << content[subString.size() - b + a - 1] << " b: " << b << " " << std::endl << std::endl;
 			
+			std::cout << subString[subString.size() - 1 - b] <<" a: " << a << " " << std::endl << content[subString.size() - b + a - 1] << " b: " << b << " " << std::endl << std::endl;
 			
+			//TODO something is fucked up here
 			if (subString[subString.size() - 1 - b ] != content[subString.size() - b + a - 1])
 			{
-				break;
+				if (clength == slength) return 0; //if the first letter is not matching AND 
+
+				else break;
 			}
 		}
 		if (b != subString.size() - 1) // if the previous loop had a break happen (if there was a character that was not matching with the substring)
 		{
-			if (!letters.count(content[subString.size() - b + a - 1])) // when the letter that is not matching with the substring is not present in the substring at all
+			if (letters.count(content[subString.size() - b + a - 1]) == 0 ) // when the letter that is not matching with the substring is not present in the substring at all
 			{
-				a += subString.length()-2;
+
+				if ((a + subString.length() - 2) <= content.size() - subString.size())
+					a += subString.length() - 2;
+				else
+					a = content.size() - subString.size();
 			}
 			std::cout << "A IS : " << a << " AND THE OTHER THING IS: " << map[(int)content[subString.size() - b + a - 1]] << " AND THE OTHER OTHER THING IS: " << content[subString.size() - b + a - 1] << std::endl;
 			a += map[(int)content[subString.size() - b + a - 1]] -1;
