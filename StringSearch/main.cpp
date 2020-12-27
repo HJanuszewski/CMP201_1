@@ -4,13 +4,29 @@
 #include <map>
 #include <unordered_map>
 #include <string>
+#include <cmath>
 
 
 unsigned short FindInLine(std::string content, std::string substring)
 {
 
+	// hash = (ascii value)* (94)^(.length() - 1 ) + (next ascii value) * (94)^(.length() -2 ) + ...
+	// ascii value of the character we're supposed to hash
+	// 94 because there's that many printable ascii characters that can appear
+	unsigned int hash_substring = 0;
+
+	for (int i = substring.length() -1 ; i >= 0 ; i--)
+	{
+		hash_substring += (substring[i] * (94 ^ substring.length() - i) % 1009);
+	}
+
+
+	//im too tired to work on this longer today I think. Continue by implementing a function or sth to change the value of the hash that is to be examined. Make sure that the hashing function was in fact properly implemented and does not just spew out random garbage (does it even compile lmao)
+
 
 }
+
+
 
 unsigned short subStringCount(std::string fileName, std::string subString )
 {
@@ -26,15 +42,13 @@ unsigned short subStringCount(std::string fileName, std::string subString )
 	while (file.good()) // while we have not reached the end of the file 
 	{
 		lastcount = 0;
-		//std::cout << "NEW LINE !! " << "Count is: " << count << std::endl;
+		
 		std::getline(file, line); //get the next line of text
-		//std::cout << line << std::endl;
-		//std::cout << "So far there were " << count << " instances. in the previous line, there were " << lastcount << std::endl;
-
+		
 		lastcount=FindInLine(line, subString); //check how many times substring appears in it and increment the count by that amount 
-		//std::cout << "I HAVE A " << count << " I HAVE " << lastcount;
+		
 		count += lastcount;
-		//std::cout << " UGH, " << count << std::endl;
+		
 	}
 
 	file.close();
