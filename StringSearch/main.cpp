@@ -14,7 +14,7 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 	unsigned short scount = 0;
 	unsigned short a = 0; // while usually those should be named i and j, I've changed them to a and b for my own convenience, since with traditional naming, I sometimes forgot that they were not local to the loops they control
 	unsigned short b = 0;
-	
+	unsigned short bad_char_a = 0;
 	 char filecount[1] = {0};
 	
 
@@ -58,7 +58,7 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 	
 	for (a = 0; a <= content.size() - subString.size() -1; a++) // in regular circumstances, nested for loops would make the efficiency a lot worse than what this algorithm can achieve, however, when running those loops, we will be modifying values of the iterators, jumping forward whenever we can.
 	{	
-		
+		bad_char_a = a;
 
 		
 		for ( b = 0; b < subString.size() -1 ; b++)
@@ -76,17 +76,24 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 		}
 		if (b != subString.size() - 1) // if the previous loop had a break happen (if there was a character that was not matching with the substring)
 		{
+		
+
 			if (letters.count(content[subString.size() - b + a - 1]) == 0 ) // when the letter that is not matching with the substring is not present in the substring at all
 			{
 
-				if ((a + subString.size() - 2) <= content.size() - subString.size())
-					a += subString.size() - 2;
+				if ((a + subString.size() - 2) <= content.size() - subString.size()) // ensuring that we will not go out of bounds
+					bad_char_a += subString.size() - 2;
 				else
-					a = content.size() - subString.size();
+					bad_char_a = content.size() - subString.size(); // if we were to go out of bonds, we should stop at the last possible check instead
 			}
-			//std::cout << "A IS : " << a << " value mapped to .size - b +a -1: " << map[(int)content[subString.size() - b + a - 1]] << " letter at position .size -b + a -1 : " << content[subString.size() - b + a ] << std::endl;
-			a += map[(int)content[subString.size() - b + a ]] -1;
+			else
+			{
+				//std::cout << "I'm changing a from " << a;
+				bad_char_a += map[(int)content[subString.size() - b + a]] - 1;
+				//std::cout << " to " << a << std::endl;
+			}
 			//std::cout << "NOW A IS : " << a << std::endl;
+			//Raskolnikov
 			
 			continue;
 		}
@@ -97,14 +104,13 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 			
 		}
 
-	}
-	
+	} 	
 	//std::cout << std::endl<< "SCOUNT IS: "<< scount << std::endl;
 	return scount;
 }
 
 
-unsigned short subStringCountBM(std::string fileName, std::string subString )
+unsigned short subStringCount(std::string fileName, std::string subString )
 {
 	unsigned short count = 0; // number of times the substring we're looking for has appeared in the text
 	unsigned short lastcount = 0;
@@ -139,8 +145,8 @@ int main()
 {
 	//TODO: understand and implement the good suffix rule
 	//TODO: find in the lectures all of the methods we're supposed to measure the performance of out programs and start to think about implementing them
-	std::cout << "count of substrings found: " <<subStringCountBM("test.txt", "Raskolnikov");
-
+	std::cout << "count of substrings found: " <<subStringCount("test.txt", "Raskolnikov");
+	
 	return 0;
 
 }
