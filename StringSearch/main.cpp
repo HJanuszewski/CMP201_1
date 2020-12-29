@@ -41,16 +41,16 @@ unsigned short FindInLine(unsigned int hash_substring, std::string content, std:
 			{
 				if (substring[j] != content[i + j]) break; //if a letter from the substring does not match a letter from the main string, break
 			}
-			if (j == substring.length()) 
+			if (j == substring.length())  // if the loop above did not break (if all characters matched)
 			{ 
 				count++; 
 				std::cout << "Found something boss" << std::endl;
-			}// if the loop above did not break (if all characters matched)
+			}
 		}
 		
 
-		//THIS PART IS BROKEN FIX IT AND THIS MIGHT(?) BE IT FOR THIS ALGORITHM PLEASE, I BEG IT TO WORK AFTER I TRY TO FIX IT
-			hash_checked = (hash_checked - (content[i] * (94 ^ (substring.length() - i)) % 1009)) * 94 + content[i + substring.length()] % 1009;
+			//UNDER\OVERFLOWS THE HELL OUT OF THIS HASH, I WANT TO GIVE UP AND GO CURL UP IN A BALL IN THE CORNER
+			hash_checked = (hash_checked - (content[i] * (94 ^ (substring.length() - i)))) * 94 + content[i + substring.length()] % 1009;
 			 // subtract the leftmost letter from the hash, add the next letter from the right to the hash
 		
 		std::cout << "substring hash: " << hash_substring << std::endl << "checked hash: " << hash_checked << std::endl << std::endl;
