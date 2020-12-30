@@ -21,13 +21,13 @@ unsigned short FindInLine(unsigned int hash_substring, std::string content, std:
 	unsigned int hash_checked = 0;
 	
 	unsigned short count = 0;
-
+	unsigned long long p =1;
 
 	
-	
-	for (short i = 0; i < substring.length(); i++)//first hash i guess?
+	for (int i = 1; i <= substring.length(); i++)
 	{
-		hash_checked += (content[i] * (94 ^ (substring.length() - i)) % 1009);
+		p = (int)pow(53, substring.length() - i);
+		hash_checked += ((short)content[i - 1] * p) % 101;
 	}
 	std::cout << "substring hash: "<< hash_substring << std::endl << "checked hash: " << hash_checked << std::endl << std::endl;
 
@@ -50,7 +50,16 @@ unsigned short FindInLine(unsigned int hash_substring, std::string content, std:
 		
 
 			//UNDER\OVERFLOWS THE HELL OUT OF THIS HASH, I WANT TO GIVE UP AND GO CURL UP IN A BALL IN THE CORNER
-			hash_checked = (hash_checked - (content[i] * (94 ^ (substring.length() - i)))) * 94 + content[i + substring.length()] % 1009;
+			p = (int)pow(53, substring.length() - 1);
+			hash_checked -= ((short)content[i] * p) % 101;
+			hash_checked = hash_checked * 53;
+			
+			hash_checked += ((short)content[i + substring.length()] ) % 101;
+	
+			//hash_checked -= (content[i] * (pow(53, substring.length()-1))) ;
+			//hash_checked = hash_checked * 53;
+			//hash_checked += (content[i+substring.length()] * (pow(53,0))) ;
+		//hash_checked = (hash_checked - (content[i] * (94 ^ (substring.length() - i)))) * 94 + content[i + substring.length()] % 1009;
 			 // subtract the leftmost letter from the hash, add the next letter from the right to the hash
 		
 		std::cout << "substring hash: " << hash_substring << std::endl << "checked hash: " << hash_checked << std::endl << std::endl;
@@ -68,14 +77,16 @@ unsigned short subStringCount(std::string fileName, std::string subString )
 {
 	unsigned short count = 0; // number of times the substring we're looking for has appeared in the text
 	unsigned short lastcount = 0;
-	unsigned int hash = 0;
+	unsigned short hash = 0;
+	unsigned long long p = 1;
 	std::fstream file;
 	std::string line = ""; //since the string we're looking for is a word, and book is formatted so that words are never split between two lines, we can treat each line separately.
 	// IF that was not the case, we could ensure the substring is not missed by accident because of this by saving the last part of each line and considering it together with the beginning of the next one
 
-	for (int i = subString.length() - 1; i >= 0; i--)
+	for (int i = 1; i<= subString.length(); i++)
 	{
-		hash += (subString[i] * (94 ^ subString.length() - i) % 1009);
+		p = (int)pow(53, subString.length()-i);
+		hash += ((short)subString[i-1] *p )%101;
 	}
 
 	file.open(fileName, std::ios::in);
