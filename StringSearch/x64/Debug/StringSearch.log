@@ -1,0 +1,11 @@
+﻿  main.cpp
+D:\Github Repos\Coursework\CMP201_1\StringSearch\main.cpp(39,4): warning C4267: "inicjowanie": konwersja z "size_t" do "int", możliwa utrata danych
+D:\Github Repos\Coursework\CMP201_1\StringSearch\main.cpp(49,36): warning C4267: "=": konwersja z "size_t" do "int", możliwa utrata danych
+D:\Github Repos\Coursework\CMP201_1\StringSearch\main.cpp(84,40): warning C4267: "+=": konwersja z "size_t" do "int", możliwa utrata danych
+D:\Github Repos\Coursework\CMP201_1\StringSearch\main.cpp(86,52): warning C4267: "=": konwersja z "size_t" do "int", możliwa utrata danych
+D:\Github Repos\Coursework\CMP201_1\StringSearch\main.cpp(134,14): warning C4244: "=": konwersja z "_Rep" do "int", możliwa utrata danych
+          with
+          [
+              _Rep=__int64
+          ]
+  StringSearch.vcxproj -> D:\Github Repos\Coursework\CMP201_1\StringSearch\x64\Debug\StringSearch.exe

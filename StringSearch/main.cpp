@@ -57,6 +57,7 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 	
 	for (int i = 0; i <= content.size() - subString.size() -1; i++) // in regular circumstances, nested for loops would make the efficiency a lot worse than what this algorithm can achieve, however, when running those loops, we will be modifying values of the iterators, jumping forward whenever we can.
 	{	
+		//std::cout << i << content[subString.size() - b + i - 1] << std::endl;
 		bad_char_a = i;
 
 		
@@ -90,9 +91,9 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 				bad_char_a += map[(int)content[subString.size() - b + i]] - 1;
 				
 			}
+			if (bad_char_a >= i)
+			i = bad_char_a;
 			
-			
-			continue;
 		}
 		else // getting to this section means that the loop has finished without breaking. This should indicate that all letters from the pattern matched, meaning that the substring was found
 		{
@@ -142,13 +143,14 @@ int main()
 	int results[100];
 	for (int i = 0; i < 100; i++)
 	{
-		results[i] = subStringCount("Half.txt", "Raskolnikov");
+		results[i] = subStringCount("full.txt", "Raskolnikov");
 	}
 	std::ofstream file;
 	file.open("times.txt");
 	for (int i = 0; i < 100; i++)
 	{
 		file << times[i] << ",";
+		std::cout << results[i] << std::endl;
 	}
 	file.close();
 	return 0;
