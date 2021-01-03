@@ -9,6 +9,9 @@
 
 using the_clock = std::chrono::steady_clock;
 
+int times[100];
+int a = 0;
+
 
 unsigned short BMFindInLine(std::string content, std::string subString)
 {
@@ -127,7 +130,7 @@ unsigned short subStringCount(std::string fileName, std::string subString )
 	 count = BMFindInLine(line, subString); //check how many times substring appears in it and increment the count by that amount 
 	 the_clock::time_point pointB = the_clock::now();
 	 auto duration = std::chrono::duration_cast<std::chrono::microseconds>(pointB - pointA).count();
-	 std::cout << "It took: " << 0.000001 * duration << " seconds"<< std::endl;
+	 times[a] = duration; a++;
 	 return count;
 }
 
@@ -135,8 +138,19 @@ unsigned short subStringCount(std::string fileName, std::string subString )
 
 int main()
 {
-	std::cout << "count of substrings found: " <<subStringCount("Full.txt", "Raskolnikov");
 	
+	int results[100];
+	for (int i = 0; i < 100; i++)
+	{
+		results[i] = subStringCount("Half.txt", "Raskolnikov");
+	}
+	std::ofstream file;
+	file.open("times.txt");
+	for (int i = 0; i < 100; i++)
+	{
+		file << times[i] << ",";
+	}
+	file.close();
 	return 0;
 
 }
