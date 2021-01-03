@@ -1,0 +1,15 @@
+﻿  main.cpp
+D:\Github Repos\Coursework\CMP201_1\StringSearch\main.cpp(20,20): warning C4018: "<=": niezgodność typu ze znakiem/bez znaku
+D:\Github Repos\Coursework\CMP201_1\StringSearch\main.cpp(27,13): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+D:\Github Repos\Coursework\CMP201_1\StringSearch\main.cpp(83,21): warning C4018: "<=": niezgodność typu ze znakiem/bez znaku
+D:\Github Repos\Coursework\CMP201_1\StringSearch\main.cpp(94,15): warning C4244: "=": konwersja z "_Rep" do "unsigned int", możliwa utrata danych
+          with
+          [
+              _Rep=__int64
+          ]
+  Trwa generowanie kodu
+  1 of 219 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Zakończono generowanie kodu
+  StringSearch.vcxproj -> D:\Github Repos\Coursework\CMP201_1\StringSearch\Release\StringSearch.exe

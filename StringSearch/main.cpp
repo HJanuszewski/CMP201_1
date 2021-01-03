@@ -6,7 +6,8 @@
 
 using the_clock = std::chrono::steady_clock;
 
-
+unsigned int result[100];
+int a = 0;
 
 int pown = 1/97; // a setup so we won't have to either hardcode the value of p that should be dependant on the lenght of the substring, or make another loop, that'd only serve to set p. Instead we start p at a value that appears weird, but will account for later loop making one to many p=p*53%1009 operations.
 //since calculations are done wiht modulo, there is no risk of overflowing int when multiplying by 97 many times
@@ -89,8 +90,9 @@ unsigned int subStringCount(std::string fileName, std::string subString )
 		count += rabinKarp(substring_hash,content_hash,subString,line); //find all occurences of the substring within the line
 		
 		the_clock::time_point pointB = the_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::microseconds>(pointB - pointA).count();
-		std::cout << "It took: " <<0.000001* duration << " seconds." << std::endl;
+		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(pointB - pointA).count();
+		result[a] = duration;  a++;
+		//std::cout << "It took: " <<duration << " microseconds." << std::endl;
 	return count;
 }
 
@@ -98,14 +100,14 @@ unsigned int subStringCount(std::string fileName, std::string subString )
 
 int main()
 {
-	unsigned int result = 0;
-	
-	result = subStringCount("full.txt", "Raskolnikov");
-	
-
-	
-	std::cout << "count of substrings found: " << result << std::endl;
-	
-	return 0;
+	int results[100];
+	for (int i = 0; i < 100; i++)
+	{
+		results[i] = subStringCount("full.txt", "Raskolnikov");
+	}
+	for (int i = 0; i < 100; i++)
+	{
+		std::cout << "took: " <<result[i] <<" milliseconds" << std::endl;
+	}return 0;
 
 }
