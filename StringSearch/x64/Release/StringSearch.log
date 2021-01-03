@@ -1,0 +1,11 @@
+﻿  main.cpp
+D:\Github Repos\Coursework\CMP201_1\StringSearch\main.cpp(36,4): warning C4267: "inicjowanie": konwersja z "size_t" do "int", możliwa utrata danych
+D:\Github Repos\Coursework\CMP201_1\StringSearch\main.cpp(46,36): warning C4267: "=": konwersja z "size_t" do "int", możliwa utrata danych
+D:\Github Repos\Coursework\CMP201_1\StringSearch\main.cpp(80,40): warning C4267: "+=": konwersja z "size_t" do "int", możliwa utrata danych
+D:\Github Repos\Coursework\CMP201_1\StringSearch\main.cpp(82,52): warning C4267: "=": konwersja z "size_t" do "int", możliwa utrata danych
+  Trwa generowanie kodu
+  1 of 459 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Zakończono generowanie kodu
+  StringSearch.vcxproj -> D:\Github Repos\Coursework\CMP201_1\StringSearch\x64\Release\StringSearch.exe

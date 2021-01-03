@@ -4,21 +4,21 @@
 #include <map>
 #include <unordered_map>
 #include <string>
+#include <sstream>
+#include <chrono>
 
+using the_clock = std::chrono::steady_clock;
 
 
 unsigned short BMFindInLine(std::string content, std::string subString)
 {
-	unsigned short clength = content.length(); // lengths of boch content and substring will never be negative; it is highly unlikely that a single line in a book will have more letters than unsigned short can hold
-	unsigned short slength = subString.length();
-	unsigned short scount = 0;
-	unsigned short a = 0; // while usually those should be named i and j, I've changed them to a and b for my own convenience, since with traditional naming, I sometimes forgot that they were not local to the loops they control
-	unsigned short b = 0;
-	unsigned short bad_char_a = 0;
-	 char filecount[1] = {0};
+	int scount = 0; // the count of the substring appearances
+	int b = 0; // a loop iterator that needs to be checked in a broader scope 
+	int bad_char_a = 0;
+	 
 	
 
-	//Raskolnikov - this problem's target substgring is  composed from letters R a s k o l n i v - CASE SENSITIVE
+	//Raskolnikov - this problem's target substgring is  composed from letters R a s k o l n i v - letters are case sensitive, but since it's a name we shouldn't expect any weird capitalizations of the word.
 	std::set<char> letters; // this set will be used to check if a letter is present in the substring
 	for (int i = 0; i < subString.length(); i++)
 	{
@@ -32,8 +32,8 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 	{	
 		if (letters.count((char)i)) //if the letter we're currently assigning is persent in the substring
 		{
-			short distance = 1;
-			for (short j = subString.length()-1; j >0; j--)
+			int distance = 1;
+			for (int j = subString.length()-1; j >0; j--)
 			{
 				if (subString[j] == (char)i)
 				{
@@ -47,29 +47,24 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 	}
 
 
-
-	std::fstream plik;
 	
-
 	
-	//std::cout << "clength: " << clength << " slength: " << slength << std::endl;
-	if (clength < slength) return 0; // the word can not be present in a line, that is shorter than the word itself
+	if (content.length() < subString.length()) return 0; // the word can not be present in a line, that is shorter than the word itself
 
 	
-	for (a = 0; a <= content.size() - subString.size() -1; a++) // in regular circumstances, nested for loops would make the efficiency a lot worse than what this algorithm can achieve, however, when running those loops, we will be modifying values of the iterators, jumping forward whenever we can.
+	for (int i = 0; i <= content.size() - subString.size() -1; i++) // in regular circumstances, nested for loops would make the efficiency a lot worse than what this algorithm can achieve, however, when running those loops, we will be modifying values of the iterators, jumping forward whenever we can.
 	{	
-		bad_char_a = a;
+		bad_char_a = i;
 
 		
 		for ( b = 0; b < subString.size() -1 ; b++)
 		{
 			
-			//std::cout << subString[subString.size() - 1 - b] <<" a: " << a << " " << std::endl << content[subString.size() - b + a - 1] << " b: " << b << " " << std::endl << std::endl;
 			
 			
-			if (subString[subString.size() - 1 - b ] != content[subString.size() - b + a - 1])
+			if (subString[subString.size() - 1 - b ] != content[subString.size() - b + i - 1])
 			{
-				if (clength == slength) return scount; //if the first letter is not matching AND the text we're looking for the substring in is the same length as the substring return from the function, there's no skipping to be done in this line
+				if (content.length() == subString.length()) return scount; //if the first letter is not matching AND the text we're looking for the substring in is the same length as the substring return from the function, there's no skipping to be done in this line
 
 				else break; // else, break out of this loop, preserving the value of b that can be uesd to calculate the offset we'll need
 			}
@@ -78,80 +73,70 @@ unsigned short BMFindInLine(std::string content, std::string subString)
 		{
 		
 
-			if (letters.count(content[subString.size() - b + a - 1]) == 0 ) // when the letter that is not matching with the substring is not present in the substring at all
+			if (letters.count(content[subString.size() - b + i - 1]) == 0 ) // when the letter that is not matching with the substring is not present in the substring at all
 			{
 
-				if ((a + subString.size() - 2) <= content.size() - subString.size()) // ensuring that we will not go out of bounds
+				if ((i + subString.size() - 2) <= content.size() - subString.size()) // ensuring that we will not go out of bounds
 					bad_char_a += subString.size() - 2;
 				else
 					bad_char_a = content.size() - subString.size(); // if we were to go out of bonds, we should stop at the last possible check instead
 			}
 			else
 			{
-				//std::cout << "I'm changing a from " << a;
-				bad_char_a += map[(int)content[subString.size() - b + a]] - 1;
-				//std::cout << " to " << a << std::endl;
+				
+				bad_char_a += map[(int)content[subString.size() - b + i]] - 1;
+				
 			}
-			//std::cout << "NOW A IS : " << a << std::endl;
-			//Raskolnikov
+			
 			
 			continue;
 		}
 		else // getting to this section means that the loop has finished without breaking. This should indicate that all letters from the pattern matched, meaning that the substring was found
 		{
 			scount++;
-			//std::cout << "CONFIRMED SUBSTRING PRESENCE " << "local count is now: " << scount << std::endl;
+			
 			
 		}
 
 	} 	
-	//std::cout << std::endl<< "SCOUNT IS: "<< scount << std::endl;
+	
 	return scount;
 }
 
 
 unsigned short subStringCount(std::string fileName, std::string subString )
 {
-	unsigned short count = 0; // number of times the substring we're looking for has appeared in the text
-	unsigned short lastcount = 0;
+	
 	std::fstream file;
-	std::string line = ""; //since the string we're looking for is a word, and book is formatted so that words are never split between two lines, we can treat each line separately.
-	// IF that was not the case, we could ensure the substring is not missed by accident because of this by saving the last part of each line and considering it together with the beginning of the next one
-
-
+	std::string line = ""; 
+	std::stringstream temp;
+	int count = 0;
 	file.open(fileName, std::ios::in);
 
 	while (file.good()) // while we have not reached the end of the file 
 	{
-		lastcount = 0;
-		//std::cout << "NEW LINE !! " << "Count is: " << count << std::endl;
+		
+		
 		std::getline(file, line); //get the next line of text
-		//std::cout << line << std::endl;
-		//std::cout << "So far there were " << count << " instances. in the previous line, there were " << lastcount << std::endl;
-
-		lastcount=BMFindInLine(line, subString); //check how many times substring appears in it and increment the count by that amount 
-		//std::cout << "I HAVE A " << count << " I HAVE " << lastcount;
-		count += lastcount;
-		//std::cout << " UGH, " << count << std::endl;
+		temp << line;
+		
 	}
-
 	file.close();
-	return count;
+	line = temp.str();
+	the_clock::time_point pointA = the_clock::now();
+	 count = BMFindInLine(line, subString); //check how many times substring appears in it and increment the count by that amount 
+	 the_clock::time_point pointB = the_clock::now();
+	 auto duration = std::chrono::duration_cast<std::chrono::microseconds>(pointB - pointA).count();
+	 std::cout << "It took: " << 0.000001 * duration << " seconds"<< std::endl;
+	 return count;
 }
 
 
 
 int main()
 {
-	//TODO: understand and implement the good suffix rule
-	//TODO: find in the lectures all of the methods we're supposed to measure the performance of out programs and start to think about implementing them
-	std::cout << "count of substrings found: " <<subStringCount("test.txt", "Raskolnikov");
+	std::cout << "count of substrings found: " <<subStringCount("Full.txt", "Raskolnikov");
 	
 	return 0;
 
 }
-/*
-Raskolnikov
-
-
-*/
